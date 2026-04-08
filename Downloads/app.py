@@ -52,11 +52,16 @@ h1 {
 # ---------------------------
 # 🧠 Load Model
 # ---------------------------
+
+import os
+
+
 @st.cache_resource
 def load_model():
     model = ViTForImageClassification.from_pretrained("google/vit-base-patch16-224")
     model.classifier = torch.nn.Linear(model.config.hidden_size, 2)
-    model.load_state_dict(torch.load("vit_pneumonia_model_weights.pth", map_location="cpu"))
+    MODEL_PATH = os.path.join(os.path.dirname(__file__), "vit_pneumonia_model_weights.pth")
+    model.load_state_dict(torch.load(MODEL_PATH, map_location="cpu"))
     model.eval()
 
     processor = ViTImageProcessor.from_pretrained("google/vit-base-patch16-224")
